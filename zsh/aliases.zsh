@@ -209,6 +209,9 @@ alias dbmr='spring rake db:migrate:redo'
 alias dbmd='spring rake db:migrate:down'
 alias dbmu='spring rake db:migrate:up'
 
+alias aws-work='aws --profile work'
+alias be='bundle exec'
+
 # Homebrew
 alias brewu='brew update  && brew upgrade && brew cleanup && brew prune && brew doctor'
 alias be='bundle exec'

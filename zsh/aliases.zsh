@@ -60,6 +60,7 @@ if [ $MACVIM_INSTALLED -eq 0 ]; then
 fi
 
 # mimic vim functions
+alias suvi='sudo vim'
 alias :q='exit'
 
 # vimrc editing

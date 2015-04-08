@@ -213,6 +213,8 @@ alias dbmu='spring rake db:migrate:up'
 
 alias aws-work='aws --profile work'
 alias be='bundle exec'
+alias conda-activate='source ~/anaconda/bin/activate'
+alias conda-deactivate='source ~/anaconda/bin/deactivate'
 
 # Homebrew
 alias brewu='brew update  && brew upgrade && brew cleanup && brew prune && brew doctor'

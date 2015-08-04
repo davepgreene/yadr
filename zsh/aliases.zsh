@@ -219,3 +219,10 @@ alias conda-deactivate='source ~/anaconda/bin/deactivate'
 # Homebrew
 alias brewu='brew update  && brew upgrade && brew cleanup && brew prune && brew doctor'
 alias be='bundle exec'
+
+# Vagrant
+alias vs='vagrant status'
+alias vu='vagrant up'
+alias vsu='vagrant suspend'
+alias vh='vagrant halt'
+alias vss='vagrant ssh'

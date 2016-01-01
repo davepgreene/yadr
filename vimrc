@@ -114,4 +114,5 @@ set ignorecase      " Ignore case when searching...
 set smartcase       " ...unless we type a capital
 
 " ================ Custom Settings ========================
+let g:yadr_using_unsolarized_terminal = 1
 so ~/.yadr/vim/settings.vim

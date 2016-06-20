@@ -33,7 +33,7 @@ alias df='df -h'
 alias du='du -h -d 2'
 
 if [[ $platform == 'linux' ]]; then
-  alias ll='ls -alh --color=auto'
+  alias ll='ls -alhF --color=auto'
   alias ls='ls --color=auto'
 elif [[ $platform == 'darwin' ]]; then
   alias ll='/usr/local/bin/gls -alGhpF --color --group-directories-first'
@@ -225,3 +225,4 @@ alias vs='vagrant status'
 alias vu='vagrant up'
 alias vsu='vagrant suspend'
 alias vh='vagrant halt'
+alias vss='vagrant ssh'

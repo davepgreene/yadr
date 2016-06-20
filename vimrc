@@ -113,6 +113,10 @@ set hlsearch        " Highlight searches by default
 set ignorecase      " Ignore case when searching...
 set smartcase       " ...unless we type a capital
 
+" ================ Font ========================
+set gfn=Source\ Code\ Pro:h14
+set columns=155
+
 " ================ Custom Settings ========================
 let g:yadr_using_unsolarized_terminal = 1
 so ~/.yadr/vim/settings.vim

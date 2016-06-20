@@ -132,9 +132,9 @@ prompt_status() {
 prompt_time() {
   local format timeoutput
   format="%l:%M %p"
-  timeoutput=$(date +"%l:%M %p")
+  timeoutput=$(date +$format)
 
-  prompt_segment black default "$timeoutput" 
+  prompt_segment black default "$timeoutput"
 }
 
 ## Main prompt

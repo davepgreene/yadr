@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+
+require_relative './brew_cask/caskroom'
+require 'thor'
+
+class BrewCaskCLI < Thor
+  def initialize(args, opts, config)
+    super
+    @caskroom = Caskroom.new unless %w(help version).include?(config[:current_command].name)
+  end
+
+  desc 'outdated', 'list outdated casks'
+  def outdated
+    @caskroom.outdated do |casks|
+      say 'There are no outdated casks', :yellow if casks.empty?
+      break if casks.empty?
+
+      puts 'Outdated packages'
+      puts '------------------'
+      header = ['Package', 'Installed Version', 'New Version']
+      output = casks.unshift(header)
+      print_table(output)
+    end
+  end
+
+  desc 'upgrade CASK', 'Upgrade a specific cask. If a cask name is omitted,' \
+  ' this task will update all outdated casks.'
+  def upgrade(cask_name = nil)
+    cask = @caskroom.get(cask_name) unless cask_name.nil?
+
+    if cask.nil? && !cask_name.nil?
+      say 'Invalid cask specified', :red
+      return
+    end
+
+    if cask_name.nil? # Upgrade everything
+      @caskroom.casklist.select(&:outdated?).each(&:upgrade)
+      invoke :cleanup
+    else # Upgrade one cask
+      cask.upgrade
+      invoke :cleanup, cask_name
+    end
+  end
+
+  desc 'cleanup CASK', 'clean up old versions of a specific cask. If a ' \
+  'cask name is omitted, this task will cleanup all outdated casks.'
+  def cleanup(cask_name = nil)
+    cask = @caskroom.get(cask_name) unless cask_name.nil?
+
+    if cask.nil? && !cask_name.nil?
+      say 'Invalid cask specified', :red
+      return
+    end
+
+    unless cask_name.nil?
+      clean_single_cask(cask)
+      return
+    end
+
+    clean_all_casks if cask_name.nil? # Cleanup everything
+  end
+
+  no_tasks do
+    def clean_block
+      proc do |c|
+        say "Cleaning up #{c.name}", :yellow
+        say "Removed #{c.old_versions.length} old versions", :yellow
+      end
+    end
+
+    def clean_single_cask(cask)
+      unless cask.can_cleanup?
+        say "#{cask.name.capitalize} does not have any outdated versions. " \
+          'No cleanup operations are necessary', :green
+        return
+      end
+
+      cask.cleanup(&clean_block)
+    end
+
+    def clean_all_casks
+      cleaned_casks = []
+      @caskroom.casklist.each do |c|
+        cleaned_casks << c if c.can_cleanup?
+        next unless c.can_cleanup?
+
+        c.cleanup(&clean_block)
+      end
+
+      say 'No cleanup operations are necessary', :green if cleaned_casks.empty?
+    end
+  end
+end
+
+BrewCaskCLI.start(ARGV)

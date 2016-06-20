@@ -128,11 +128,21 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+# Output current time
+prompt_time() {
+  local format timeoutput
+  format="%l:%M %p"
+  timeoutput=$(date +"%l:%M %p")
+
+  prompt_segment black default "$timeoutput" 
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
-  prompt_context
+  prompt_time
+  #prompt_context
   prompt_dir
   prompt_git
   prompt_end

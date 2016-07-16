@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+set -e
+set -x
+
+for package in $(pip list --outdated | cut -d ' ' -f1)
+do
+  pip install -U "$package"
+done

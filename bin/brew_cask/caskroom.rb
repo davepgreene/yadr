@@ -1,20 +1,23 @@
 require_relative './cask'
 require 'thor'
 
+# Represents a list of Casks.
 class Caskroom < Thor::Shell::Basic
   attr_reader :casklist
 
   def initialize
     super
     @casks = `brew cask ls`.split("\n")
-    @casklist = @casks.map do |cask|
-      Cask.new(cask)
-    end
+    @casklist = @casks.map { |cask| Cask.new(cask) }
+  end
+
+  def deprecated
+    output = @casklist.select(&:deprecated?)
+    yield output
   end
 
   def outdated
-    outdated_casks = @casklist.select(&:outdated?)
-    output = outdated_casks.map do |cask|
+    output = @casklist.select(&:outdated?).map do |cask|
       [cask.name, cask.installed_version, cask.current_version]
     end
     yield output

@@ -5,14 +5,17 @@ require 'open3'
 CASKROOM = '/usr/local/Caskroom'.freeze
 DIR_BLACKLIST = ['.', '..', '.metadata'].freeze
 
+# Cask control class. Implements operations on a single cask.
 class Cask < Thor::Shell::Basic
-  attr_reader :name
+  attr_reader :name, :dir
 
   def initialize(name)
     super()
     @name = name
-    @info = `brew cask info #{name}`.split("\n")
-    @dir = File.join(CASKROOM, name)
+    @info = deprecated? ? [] : `brew cask info #{name}`.split("\n")
+    @name = @name.delete(' (!)') if deprecated?
+    @deprecated = deprecated?
+    @dir = File.join(CASKROOM, @name)
   end
 
   def current_version
@@ -27,8 +30,12 @@ class Cask < Thor::Shell::Basic
     Dir.entries(@dir).reject { |i| DIR_BLACKLIST.include?(i) }.sort
   end
 
+  def deprecated?
+    @deprecated ||= @name.include?('(!)')
+  end
+
   def can_cleanup?
-    local_versions.length > 1
+    local_versions.length > 1 || @deprecated
   end
 
   def outdated?
@@ -55,11 +62,23 @@ class Cask < Thor::Shell::Basic
 
   def cleanup
     return unless can_cleanup?
-    yield self
-
-    old_versions.each do |version|
-      dir = File.join(@dir, version)
-      ::FileUtils.rm_rf(dir, :secure => true, :verbose => true)
+    if @deprecated == true
+      yield self, local_versions
+      rm_cask
+    else
+      yield self, old_versions
+      rm_versions(old_versions)
     end
+  end
+
+  def rm_versions(versions)
+    versions.each do |version|
+      dir = File.join(@dir, version)
+      ::FileUtils.rm_rf(dir, secure: true, verbose: true)
+    end
+  end
+
+  def rm_cask
+    ::FileUtils.rm_rf(@dir, secure: true, verbose: true)
   end
 end

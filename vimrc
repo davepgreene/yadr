@@ -115,6 +115,8 @@ set smartcase       " ...unless we type a capital
 
 " ================ Font ========================
 set gfn=Source\ Code\ Pro:h14
+
+set lines=40
 set columns=155
 
 " ================ Custom Settings ========================

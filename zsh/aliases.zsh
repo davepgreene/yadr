@@ -27,6 +27,8 @@ alias psr='ps aux | grep ruby'
 # Moving around
 alias cdb='cd -'
 alias cls='clear;ls'
+alias cdmd='cd ~/Documents'
+alias cdcode='cd ~/Rapid7'
 
 # Show human friendly numbers and colors
 alias df='df -h'
@@ -98,6 +100,7 @@ alias gr='git rebase'
 alias gra='git rebase --abort'
 alias ggrc='git rebase --continue'
 alias gbi='git rebase --interactive'
+alias gitup='git checkout master && git pull && git checkout - && git rebase -s recursive -X theirs master'
 alias gl='git l'
 alias glg='git l'
 alias glog='git l'
@@ -110,7 +113,8 @@ alias gfch='git fetch'
 alias gd='git diff'
 alias gb='git b'
 alias gbd='git b -D -w'
-alias gba='git branch -av'
+alias gba='git b --all --verbose'
+# Staged and cached are the same thing
 alias gdc='git diff --cached -w'
 alias gds='git diff --staged -w'
 alias gpub='grb publish'
@@ -219,6 +223,13 @@ alias conda-deactivate='source ~/anaconda/bin/deactivate'
 # Homebrew
 alias brewu='brew update  && brew upgrade && brew cleanup && brew prune && brew doctor'
 alias be='bundle exec'
+# Bundler
+alias be='bundler exec'
+alias beco='be convection'
+alias bek='be kitchen'
+alias build='be build'
+alias bev='ulimit -n 1024; VAGRANT_I_KNOW_WHAT_IM_DOING_PLEASE_BE_QUIET=true be vagrant'
+alias be-vendor='rm -rf vendor && git clone git@github.com:rapid7/chef-razor-data.git vendor/chef && be build berks local'
 
 # Vagrant
 alias vs='vagrant status'

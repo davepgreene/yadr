@@ -16,6 +16,11 @@ class Cask < Thor::Shell::Basic
     @name = @name.delete(' (!)') if deprecated?
     @deprecated = deprecated?
     @dir = File.join(CASKROOM, @name)
+    # filter_info
+  end
+
+  def filter_info
+    @info.select! { |i| !i.end_with?('(does not exist)')}
   end
 
   def current_version
@@ -30,16 +35,20 @@ class Cask < Thor::Shell::Basic
     Dir.entries(@dir).reject { |i| DIR_BLACKLIST.include?(i) }.sort
   end
 
+  def local_metadata_versions
+    Dir.entries(File.join(@dir, '.metadata')).reject { |i| DIR_BLACKLIST.include?(i) }.sort
+  end
+
   def deprecated?
     @deprecated ||= @name.include?('(!)')
   end
 
   def can_cleanup?
-    local_versions.length > 1 || @deprecated
+    (local_versions.length > 1 || local_metadata_versions.length > 1) || @deprecated
   end
 
   def outdated?
-    @info.join("\n").include?('Not installed')
+    current_version != installed_version
   end
 
   def upgrade
@@ -60,6 +69,11 @@ class Cask < Thor::Shell::Basic
     previous
   end
 
+  def old_metadata
+    _, *previous = local_metadata_versions.reverse
+    previous
+  end
+
   def cleanup
     return unless can_cleanup?
     if @deprecated == true
@@ -67,15 +81,25 @@ class Cask < Thor::Shell::Basic
       rm_cask
     else
       yield self, old_versions
-      rm_versions(old_versions)
+      rm_old(old_versions, method(:rm_version))
+      rm_old(old_metadata, method(:rm_metadata))
     end
   end
 
-  def rm_versions(versions)
+  def rm_old(versions, method)
     versions.each do |version|
-      dir = File.join(@dir, version)
-      ::FileUtils.rm_rf(dir, secure: true, verbose: true)
+      method.call(version)
     end
+  end
+
+  def rm_version(version)
+    dir = File.join(@dir, version)
+    ::FileUtils.rm_rf(dir, secure: true, verbose: true)
+  end
+
+  def rm_metadata(version)
+    dir = File.join(@dir, '.metadata', version)
+    ::FileUtils.rm_rf(dir, secure: true, verbose: true)
   end
 
   def rm_cask

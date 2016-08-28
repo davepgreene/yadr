@@ -178,6 +178,16 @@ def install_homebrew
   puts
 end
 
+def install_gems
+  puts "======================================================"
+  puts "Installing specified gems"
+  puts "======================================================"
+  ['brew-cask-tools'].each do |gem|
+    run %{ gem install #{gem} }
+  end
+  puts
+end
+
 def install_fonts
   puts "======================================================"
   puts "Installing patched fonts for Powerline/Lightline."

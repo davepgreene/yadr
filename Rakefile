@@ -25,6 +25,8 @@ task :install => [:submodule_init, :submodules] do
     Rake::Task["install_vundle"].execute
   end
 
+  install_gems
+
   Rake::Task["install_prezto"].execute
 
   install_fonts
@@ -182,7 +184,7 @@ def install_gems
   puts "======================================================"
   puts "Installing specified gems"
   puts "======================================================"
-  ['brew-cask-tools'].each do |gem|
+  ['brew-cask-tools', 'jazz_hands'].each do |gem|
     run %{ gem install #{gem} }
   end
   puts

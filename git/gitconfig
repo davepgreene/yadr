@@ -118,7 +118,7 @@
 [core]
   autocrlf = false
   editor = vim
-  excludesfile = ~/.yadr/git/gitignore
+	excludesfile = /Users/dgreene/.yadr/git/gitignore
 [advice]
   statusHints = false
 [diff]
@@ -130,5 +130,16 @@
   # Remember my merges
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
   enabled = true
+[difftool "sourcetree"]
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true
+[user]
+	name = Dave Greene
+	email = davepgreene@gmail.com
+[commit]
+	template = /Users/dgreene/.stCommitMsg
 [include]
   path = ~/.gitconfig.user

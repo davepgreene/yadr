@@ -48,11 +48,18 @@ Session.vim
 
 # JetBrains project settings
 # ----------------------------------------------------------------------------------------------
-.idea/*
+.idea/
+*.iml
 
 # Visual Studio Code
 # ----------------------------------------------------------------------------------------------
 .vscode/
+.project
+.settings/
+.classpath
 
 # JS service local config
 *DO-NOT-COMMIT.json
+typings.json
+typings/
+.bundle/

@@ -130,14 +130,8 @@ prompt_status() {
 
 # Output current time
 prompt_time() {
-<<<<<<< HEAD
-  local format timeoutput
-  format="%l:%M %p"
-  timeoutput=$(date +$format)
-=======
   local timeoutput
   timeoutput=$(date +%r)
->>>>>>> Fixed bug in date format.
 
   prompt_segment black default "$timeoutput"
 }

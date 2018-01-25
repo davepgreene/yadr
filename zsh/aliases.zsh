@@ -139,7 +139,8 @@ alias gdmb='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
 
 # Common shell functions
 alias less='less -r'
-alias tf='tail -f'
+alias tf='tail -fi'
+alias tailf='tail -f'
 alias l='less'
 alias lh='ls -alt | head' # see the last modified files
 alias screen='TERM=screen screen'
@@ -237,3 +238,7 @@ alias vu='vagrant up'
 alias vsu='vagrant suspend'
 alias vh='vagrant halt'
 alias vss='vagrant ssh'
+
+alias runsvc='target/*-dev/bin/control.sh run'
+alias mci='mvn clean install'
+alias fixcam='sudo killall AppleCameraAssistant;sudo killall VDCAssistant'
